@@ -9,8 +9,11 @@ public class Tablero extends JFrame {
     public  Tablero(){
 
     inicializarTablero();
-    Lbl();
-    add(new Cuadro(),BorderLayout.CENTER);
+    Lbl lbl=new Lbl();
+    Lbl2 lbl2=new Lbl2();
+    add(lbl,BorderLayout.NORTH);
+    add(lbl2,BorderLayout.SOUTH);
+    add(new Cuadro(lbl,lbl2),BorderLayout.CENTER);
 
     }
 
@@ -23,20 +26,7 @@ public class Tablero extends JFrame {
         setTitle("Cuatro en raya");
     }
 
-    public void Lbl() {
-        JPanel jPanel = new JPanel();
-        jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.Y_AXIS)); // Usar BoxLayout para alinear verticalmente
 
-        label1 = new JLabel("Jugador 1");
-        label1.setFont(new Font("Arial", Font.PLAIN, 24)); // Cambiar el tamaño de la fuente si lo deseas
-        jPanel.add(label1);
-
-        label2 = new JLabel("Jugador 2");
-        label2.setFont(new Font("Arial", Font.PLAIN, 24)); // Cambiar el tamaño de la fuente si lo deseas
-        jPanel.add(label2);
-
-        add(jPanel, BorderLayout.NORTH);
-    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(()-> new Tablero());
