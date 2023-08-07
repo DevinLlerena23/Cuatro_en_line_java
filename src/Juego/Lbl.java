@@ -7,7 +7,7 @@ public class Lbl extends JPanel {
     JLabel label1;
 
 
-    public Lbl () {
+    public Lbl() {
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.Y_AXIS)); // Usar BoxLayout para alinear verticalmente
 
