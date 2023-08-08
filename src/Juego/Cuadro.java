@@ -19,6 +19,12 @@ public class Cuadro extends JPanel {
         this.lbl2 = lbl2;
         circuloImagen = new ImageIcon[columnas][filas];
 
+        for (int i = 0; i < columnas; i++) {
+            for (int j = 0; j < filas; j++) {
+                circuloImagen[i][j] = null; // Inicializar con valores nulos
+            }
+        }
+
         // Agregar un MouseListener para detectar clics en el panel
         addMouseListener(new MouseAdapter() {
 
@@ -33,27 +39,65 @@ public class Cuadro extends JPanel {
                 int x = (e.getX() - xOffset) / side;
                 int y = (e.getY() - yOffset) / side;
 
-                if (x >= 0 && x < columnas && y >= 0 && y < filas && circuloImagen[x][y] == null) {
-                    // Asignar la imagen al cuadro donde se hizo clic
-                    if (jugador) {
-                        lbl2.setVisible(true);
-                        lbl.setVisible(false);
+                if (x >= 0 && x < columnas && y >= 0 && y < filas) {
+                    int lowestAvailableRow = -1;
+                    for (int i = filas - 1; i >= 0; i--) {
+                        if (circuloImagen[x][i] == null) {
+                            lowestAvailableRow = i;
+                            break;
+                        }
+                    }
 
-                        circuloImagen[x][y] = new ImageIcon(getClass().getResource("img/circulob2.png"));
-                        repaint();
+                    if (lowestAvailableRow != -1) {
+                        if (jugador) {
+                            lbl2.setVisible(true);
+                            lbl.setVisible(false);
 
-                        jugador = false;
-                    } else {
-                        lbl.setVisible(true);
+                            circuloImagen[x][lowestAvailableRow] = new ImageIcon(getClass().getResource("img/circulob2.png"));
+                            repaint();
 
-                        lbl2.setVisible(false);
-                        circuloImagen[x][y] = new ImageIcon(getClass().getResource("img/circulor2.png"));
-                        repaint();
-                        jugador = true;
+                            jugador = false;
+                        } else {
+                            lbl.setVisible(true);
+
+                            lbl2.setVisible(false);
+                            circuloImagen[x][lowestAvailableRow] = new ImageIcon(getClass().getResource("img/circulor2.png"));
+                            repaint();
+                            jugador = true;
+                        }
+                        
+                        if (comprobarGanador()) {
+                            JOptionPane.showMessageDialog(Cuadro.this, "¡Jugador " + (jugador ? "2" : "1") + " ha ganado!");
+                            reiniciarJuego();
+                        }
                     }
                 }
             }
         });
+    }
+    public boolean comprobarGanador() {
+        // Comprobar alineaciones horizontales
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas - 3; j++) {
+                if (circuloImagen[j][i] != null &&
+                    circuloImagen[j][i].equals(circuloImagen[j + 1][i]) &&
+                    circuloImagen[j][i].equals(circuloImagen[j + 2][i]) &&
+                    circuloImagen[j][i].equals(circuloImagen[j + 3][i])) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    public void reiniciarJuego() {
+        for (int i = 0; i < columnas; i++) {
+            for (int j = 0; j < filas; j++) {
+                circuloImagen[i][j] = null;
+            }
+        }
+        jugador = true;
+        repaint();
     }
 
     @Override
