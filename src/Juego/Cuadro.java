@@ -79,11 +79,14 @@ public class Cuadro extends JPanel {
         // Comprobar alineaciones horizontales
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas - 3; j++) {
-                if (circuloImagen[j][i] != null &&
-                    circuloImagen[j][i].equals(circuloImagen[j + 1][i]) &&
-                    circuloImagen[j][i].equals(circuloImagen[j + 2][i]) &&
-                    circuloImagen[j][i].equals(circuloImagen[j + 3][i])) {
+                System.out.println("i: " + i + " j: " + j + " " + circuloImagen[j][i]);
+                System.out.println(circuloImagen[j+1][i]);
+                while (circuloImagen[j][i] != null && circuloImagen[j+1][i] != null && circuloImagen[j+2][i] != null && circuloImagen[j+3][i] != null) {
+                    if(circuloImagen[j][i].getImage().equals(circuloImagen[j+1][i].getImage()) &&
+                    circuloImagen[j][i].getImage().equals(circuloImagen[j+2][i].getImage()) &&
+                    circuloImagen[j][i].getImage().equals(circuloImagen[j+3][i].getImage())){
                     return true;
+                    }
                 }
             }
         }
