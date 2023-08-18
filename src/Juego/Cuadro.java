@@ -30,6 +30,7 @@ public class Cuadro extends JPanel {
 
             @Override
             public void mouseClicked(MouseEvent e) {
+
                 int width = getWidth();
                 int height = getHeight();
                 int side = Math.min(width, height) / columnas;
@@ -48,6 +49,8 @@ public class Cuadro extends JPanel {
                         }
                     }
 
+
+
                     if (lowestAvailableRow != -1) {
                         if (jugador) {
                             lbl2.setVisible(true);
@@ -57,6 +60,7 @@ public class Cuadro extends JPanel {
                             repaint();
 
                             jugador = false;
+                            
                         } else {
                             lbl.setVisible(true);
 
@@ -64,35 +68,125 @@ public class Cuadro extends JPanel {
                             circuloImagen[x][lowestAvailableRow] = new ImageIcon(getClass().getResource("img/circulor2.png"));
                             repaint();
                             jugador = true;
+                            
                         }
+
                         
-                        if (comprobarGanador()) {
-                            JOptionPane.showMessageDialog(Cuadro.this, "¡Jugador " + (jugador ? "2" : "1") + " ha ganado!");
-                            reiniciarJuego();
-                        }
+                    }
+                    if (comprobarGanadorH() || comprobarGanadorV() || comprobarGanadorD()) {
+                        JOptionPane.showMessageDialog(Cuadro.this,"¡Jugador " + (jugador ? "2" : "1") + " ha ganado!");
+                        lbl.setVisible(false);
+                        lbl2.setVisible(false);
+                        reiniciarJuego();
                     }
                 }
             }
         });
     }
-    public boolean comprobarGanador() {
+
+    public boolean comprobarGanadorH() {
         // Comprobar alineaciones horizontales
         for (int i = 0; i < filas; i++) {
-            for (int j = 0; j < columnas - 3; j++) {
+
+            // check to the right
+            for (int j = 0; j <= columnas - 4; j++) {
                 System.out.println("i: " + i + " j: " + j + " " + circuloImagen[j][i]);
-                System.out.println(circuloImagen[j+1][i]);
-                while (circuloImagen[j][i] != null && circuloImagen[j+1][i] != null && circuloImagen[j+2][i] != null && circuloImagen[j+3][i] != null) {
-                    if(circuloImagen[j][i].getImage().equals(circuloImagen[j+1][i].getImage()) &&
-                    circuloImagen[j][i].getImage().equals(circuloImagen[j+2][i].getImage()) &&
-                    circuloImagen[j][i].getImage().equals(circuloImagen[j+3][i].getImage())){
-                    return true;
+
+                if (circuloImagen[j][i] != null &&
+                        circuloImagen[j + 1][i] != null &&
+                        circuloImagen[j + 2][i] != null &&
+                        circuloImagen[j + 3][i] != null) {
+
+                    // Horizontal derecha
+                    if (circuloImagen[j][i].getImage().equals(circuloImagen[j + 1][i].getImage()) &&
+                            circuloImagen[j][i].getImage().equals(circuloImagen[j + 2][i].getImage()) &&
+                            circuloImagen[j][i].getImage().equals(circuloImagen[j + 3][i].getImage())) {
+                        return true;
+                    }
+                }
+            }
+
+            // check to the left
+            for (int j = columnas - 1; j >= 3; j--) {
+                System.out.println("i: " + i + " j: " + j + " " + circuloImagen[j][i]);
+
+                if (circuloImagen[j][i] != null &&
+                        circuloImagen[j - 1][i] != null &&
+                        circuloImagen[j - 2][i] != null &&
+                        circuloImagen[j - 3][i] != null) {
+
+                    // Horizontal izquierda
+                    if (circuloImagen[j][i].getImage().equals(circuloImagen[j - 1][i].getImage()) &&
+                            circuloImagen[j][i].getImage().equals(circuloImagen[j - 2][i].getImage()) &&
+                            circuloImagen[j][i].getImage().equals(circuloImagen[j - 3][i].getImage())) {
+                        return true;
                     }
                 }
             }
         }
         return false;
     }
-    
+
+    public boolean comprobarGanadorV() {
+        for (int i = 0; i <= filas - 4; i++) {
+            for (int j = 0; j < columnas; j++) {
+                if (circuloImagen[j][i] != null &&
+                        circuloImagen[j][i + 1] != null &&
+                        circuloImagen[j][i + 2] != null &&
+                        circuloImagen[j][i + 3] != null) {
+
+                    // Vertical arriba
+                    if (circuloImagen[j][i].getImage().equals(circuloImagen[j][i + 1].getImage()) &&
+                            circuloImagen[j][i].getImage().equals(circuloImagen[j][i + 2].getImage()) &&
+                            circuloImagen[j][i].getImage().equals(circuloImagen[j][i + 3].getImage())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean comprobarGanadorD() {
+        // Comprobar alineaciones diagonales
+
+        // top-left to bottom-right
+        for (int i = 0; i <= filas - 4; i++) {
+            for (int j = 0; j <= columnas - 4; j++) {
+                if (circuloImagen[j][i] != null &&
+                        circuloImagen[j + 1][i + 1] != null &&
+                        circuloImagen[j + 2][i + 2] != null &&
+                        circuloImagen[j + 3][i + 3] != null) {
+
+                    if (circuloImagen[j][i].getImage().equals(circuloImagen[j + 1][i + 1].getImage()) &&
+                            circuloImagen[j][i].getImage().equals(circuloImagen[j + 2][i + 2].getImage()) &&
+                            circuloImagen[j][i].getImage().equals(circuloImagen[j + 3][i + 3].getImage())) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        // top-right to bottom-left
+        for (int i = 0; i <= filas - 4; i++) {
+            for (int j = columnas - 1; j >= 3; j--) {
+                if (circuloImagen[j][i] != null &&
+                        circuloImagen[j - 1][i + 1] != null &&
+                        circuloImagen[j - 2][i + 2] != null &&
+                        circuloImagen[j - 3][i + 3] != null) {
+
+                    if (circuloImagen[j][i].getImage().equals(circuloImagen[j - 1][i + 1].getImage()) &&
+                            circuloImagen[j][i].getImage().equals(circuloImagen[j - 2][i + 2].getImage()) &&
+                            circuloImagen[j][i].getImage().equals(circuloImagen[j - 3][i + 3].getImage())) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
     public void reiniciarJuego() {
         for (int i = 0; i < columnas; i++) {
             for (int j = 0; j < filas; j++) {
